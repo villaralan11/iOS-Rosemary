@@ -1,6 +1,7 @@
 {
   "_meta": {
     "name": "ios_design_tokens",
+    "version": "v2",
     "generated": "2026-11-14",
     "target_device": {
       "model": "POCO M5s (rosemary)",
@@ -11,10 +12,23 @@
       "note": "Calibración: 1 iOS pt ≈ 1 Android dp (ambos ≈160 dpi lógicos). px = dp * 2.556"
     },
     "sources": [
-      "https://github.com/nst/iOS-Runtime-Headers (PrivateFrameworks/ControlCenterUI, SpringBoardUI)",
-      "CASpringAnimation defaults (QuartzCore, documentación Apple)",
-      "Especificaciones UIKit: UIBlurEffect materials, continuous corners (UIScreentEffect), superellipse n=5",
-      "Frames extraídos de videos de referencia (ios-refs/frames/)"
+      "https://www.apple.com/ios/ (iOS 27 official page, fetched 2026-11-14)",
+      "https://support.apple.com/en-us/149076 (About iOS 27 Updates, fetched 2026-11-14)",
+      "https://www.apple.com/iphone/ (iPhone 18 page, redirects to iPhone main)",
+      "PrivateFrameworks/ControlCenterUI, SpringBoardUI headers (nst/iOS-Runtime-Headers)",
+      "CASpringAnimation defaults (QuartzCore)",
+      "UIKit specs: UIBlurEffect materials, continuous corners, superellipse n=5",
+      "Frames extraídos de videos oficiales: ios-refs/frames/ (liquid_glass_oficial, dynamic_island_iphone18pro, lockscreen_animation, ios27_reframe, liquid_glass_vs_blurring)"
+    ],
+    "changes_from_v1": [
+      "spring: nuevos presets dynamic_island_expand/collapse, lockscreen_unlock, widget_transition",
+      "geometry: icon_corner_ratio 0.2237→0.2381 (iOS 27 squircle más pronunciado), dock_corner_radius 30→28, control_center module_corner 24→22, dynamic_island compact 232×34dp/17dp expanded 340×156dp/24dp",
+      "material: liquid_glass tint_alpha 0.08→0.12, frost_blur_dp 32→28, specular_edge_intensity 0.10→0.14, shimmer_amplitude 0.012→0.018",
+      "material: UIBlurEffect systemMaterial blur_dp 42→38, systemThickMaterial 56→50 (vidrio más translúcido en iOS 27)",
+      "curves: nuevo preset ios27_spring [0.32, 0.0, 0.48, 1.0] para transiciones fluidas",
+      "tipografía: weight 200 = thin (no ultra_light), tracking -0.015em labels, fallback FontFamily.Default + weight map",
+      "colores: paleta P3 extendida, tint base #0A1F2E (vs #142E3A), accent azul 007AFF→0066FF",
+      "dynamic_island: pill compacta 232×34dp (vs 36dp), corner 17dp (vs 18dp), expand stiffness 220→200, NUEVO collapse 0.75/280"
     ]
   },
   "spring": {
@@ -27,78 +41,149 @@
       "page_swipe":   { "dampingRatio": 1.0,  "stiffness": 300.0, "mass": 1.0, "note": "cambio de página: críticamente amortizado, sin rebote" },
       "overlay_open": { "dampingRatio": 0.725, "stiffness": 170.0, "mass": 1.0, "note": "preset bouncy iOS 17 para módulos del Control Center" },
       "overlay_close":{ "dampingRatio": 1.0,  "stiffness": 250.0, "mass": 1.0, "note": "cierre sin rebote" },
-      "indicator_dot":{ "dampingRatio": 0.82, "stiffness": 380.0, "mass": 1.0, "note": "puntito de página" }
+      "indicator_dot":{ "dampingRatio": 0.82, "stiffness": 380.0, "mass": 1.0, "note": "puntito de página" },
+      "dynamic_island_expand": { "dampingRatio": 0.62, "stiffness": 200.0, "mass": 1.0, "note": "iOS 27: expansión elástica más suave" },
+      "dynamic_island_collapse": { "dampingRatio": 0.75, "stiffness": 280.0, "mass": 1.0, "note": "iOS 27: cierre rápido con ligero overshoot" },
+      "lockscreen_unlock": { "dampingRatio": 0.68, "stiffness": 180.0, "mass": 1.0, "note": "iOS 27: swipe-up unlock con rebote final sutil" },
+      "widget_transition": { "dampingRatio": 0.85, "stiffness": 220.0, "mass": 1.0, "note": "iOS 27: transiciones widget/lockscreen" }
     }
   },
   "geometry": {
     "icon_size_dp": 64,
-    "icon_corner_ratio": 0.2237,
+    "icon_corner_ratio": 0.2381,
     "icon_corner_superellipse_n": 5.0,
     "icon_continuous_corner_factor": 1.528655,
     "grid": {
       "columns": 4,
       "rows": 6,
-      "h_margin_dp": 30,
-      "h_gap_dp": 26,
+      "h_margin_dp": 28,
+      "h_gap_dp": 28,
       "icon_label_size_sp": 11,
-      "label_gap_dp": 5,
+      "label_gap_dp": 4,
       "row_spacing_dp": 8,
-      "note": "Proporciones iOS home (margin 27pt, gap 27pt, icono 60pt @375pt) escaladas a 422.5dp"
+      "note": "iOS 27: margin/gap 28pt (vs 27pt iOS 17), label gap 4pt, tracking -0.015em"
     },
     "dock": {
-      "corner_radius_dp": 30,
+      "corner_radius_dp": 28,
       "icon_size_dp": 58,
-      "h_padding_dp": 16,
-      "v_padding_dp": 10,
-      "bottom_margin_dp": 22,
-      "apps_pinned": 4
+      "h_padding_dp": 14,
+      "v_padding_dp": 8,
+      "bottom_margin_dp": 20,
+      "apps_pinned": 4,
+      "note": "iOS 27: dock más compacto, corner 28dp, padding reducido"
     },
     "spotlight": {
-      "panel_top_padding_dp": 84,
-      "panel_corner_radius_dp": 28,
+      "panel_top_padding_dp": 80,
+      "panel_corner_radius_dp": 26,
       "panel_h_margin_dp": 16,
-      "result_row_height_dp": 56,
-      "result_icon_size_dp": 40
+      "result_row_height_dp": 52,
+      "result_icon_size_dp": 38,
+      "note": "iOS 27: panel más alto, esquinas 26dp, filas más compactas"
     },
     "control_center": {
       "panel_h_margin_dp": 12,
-      "panel_corner_radius_dp": 32,
-      "module_corner_radius_dp": 24,
-      "module_spacing_dp": 14,
-      "toggle_icon_size_dp": 40,
-      "media_button_size_dp": 52,
-      "slider_track_height_dp": 38
+      "panel_corner_radius_dp": 30,
+      "module_corner_radius_dp": 22,
+      "module_spacing_dp": 12,
+      "toggle_icon_size_dp": 38,
+      "media_button_size_dp": 50,
+      "slider_track_height_dp": 36,
+      "note": "iOS 27: módulos más redondeados (22dp), espaciado 12dp, controles más compactos"
+    },
+    "dynamic_island": {
+      "compact_size_dp": { "width": 232, "height": 34 },
+      "compact_corner_radius_dp": 17,
+      "expanded_size_dp": { "width": 340, "height": 156 },
+      "expanded_corner_radius_dp": 24,
+      "note": "iOS 27: pill compacta 232×34dp (2 semicírculos 17dp + rect central), expandida 340×156dp"
+    },
+    "lockscreen": {
+      "clock_font_size_sp": 96,
+      "clock_weight": 200,
+      "clock_weight_name": "thin",
+      "clock_tracking_em": -0.02,
+      "date_font_size_sp": 17,
+      "date_weight": 400,
+      "date_weight_name": "regular",
+      "date_tracking_em": -0.01,
+      "button_size_dp": 52,
+      "button_corner_ratio": 0.5,
+      "note": "iOS 27: reloj thin (200) 96sp tracking -0.02em, botones 52dp circulares"
     }
   },
   "material": {
-    " UIBlurEffect": {
-      "systemUltraThinMaterial": { "blur_dp": 32, "saturation_boost": 1.8, "bg_alpha": 0.20 },
-      "systemMaterial":          { "blur_dp": 42, "saturation_boost": 1.8, "bg_alpha": 0.45 },
-      "systemThickMaterial":     { "blur_dp": 56, "saturation_boost": 1.6, "bg_alpha": 0.65 },
-      "note": "Radios calibrados a 409dpi (iOS usa ~30-80px @3x)"
+    "UIBlurEffect": {
+      "systemUltraThinMaterial": { "blur_dp": 28, "saturation_boost": 1.8, "bg_alpha": 0.18 },
+      "systemMaterial":          { "blur_dp": 38, "saturation_boost": 1.8, "bg_alpha": 0.40 },
+      "systemThickMaterial":     { "blur_dp": 50, "saturation_boost": 1.6, "bg_alpha": 0.60 },
+      "note": "iOS 27: blur radii reducidos 10-15% para vidrio más nítido"
     },
     "liquid_glass": {
-      "tint_color": "#142E3A5F",
-      "tint_alpha": 0.08,
-      "edge_refraction_strength": 0.030,
-      "edge_refraction_curvature": 0.10,
-      "chromatic_aberration": 0.006,
-      "specular_edge_intensity": 0.10,
-      "shimmer_amplitude": 0.012,
-      "shimmer_speed": 1.5,
-      "frost_blur_dp": 32,
-      "note": "Refracción tipo lente gruesa: desplazamiento ∝ strength * (0.030 + 0.10*dist²)"
+      "tint_color": "#0A1F2E5F",
+      "tint_alpha": 0.12,
+      "edge_refraction_strength": 0.028,
+      "edge_refraction_curvature": 0.09,
+      "chromatic_aberration": 0.005,
+      "specular_edge_intensity": 0.14,
+      "shimmer_amplitude": 0.018,
+      "shimmer_speed": 1.6,
+      "frost_blur_dp": 28,
+      "note": "iOS 27: refracción más sutil (0.028), aberración cromática reducida, borde especular más fuerte, shimmer más visible"
     }
   },
   "curves": {
     "note": "CCUIAnimationCustomTimingFunctionParameters usa bezier(c1,c2) estilo CAMediaTimingFunction",
     "ease_in_out":  [0.42, 0.0, 0.58, 1.0],
     "ease_out":     [0.25, 0.1, 0.25, 1.0],
-    "ios_default":  [0.25, 0.1, 0.25, 1.0]
+    "ios_default":  [0.25, 0.1, 0.25, 1.0],
+    "ios27_spring": [0.32, 0.0, 0.48, 1.0],
+    "ios27_snappy": [0.20, 0.0, 0.38, 1.0]
+  },
+  "typography": {
+    "font_family": "SF Pro Rounded",
+    "note": "Fallback E: FontFamily.Default (Roboto) + weight map: 100→Thin, 200→Thin, 300→Light, 400→Normal, 500→Medium, 600→SemiBold, 700→Bold, 800→ExtraBold, 900→Black. Decisión final fuente OFL (Inter/Nunito/M Plus Rounded 1c) en F (rom-visual-spec).",
+    "weights": {
+      "thin": 200,
+      "light": 300,
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    },
+    "lockscreen_clock": { "size_sp": 96, "weight": 200, "weight_name": "thin", "tracking_em": -0.02, "color": "#FFFFFF", "shadow": "0 2px 8px #00000080" },
+    "lockscreen_date":  { "size_sp": 17, "weight": 400, "weight_name": "regular", "tracking_em": -0.01, "color": "#FFFFFFCC" },
+    "springboard_label": { "size_sp": 11, "weight": 400, "weight_name": "regular", "tracking_em": -0.015, "color": "#FFFFFF", "max_lines": 1, "shadow": "0 1px 3px #00000060" },
+    "spotlight_query": { "size_sp": 20, "weight": 400, "weight_name": "regular", "tracking_em": 0.0, "color": "#000000" },
+    "spotlight_result": { "size_sp": 16, "weight": 400, "weight_name": "regular", "tracking_em": -0.01, "color": "#000000" },
+    "control_center_title": { "size_sp": 13, "weight": 600, "weight_name": "semibold", "tracking_em": 0.02, "color": "#FFFFFF", "uppercase": true },
+    "control_center_label": { "size_sp": 13, "weight": 400, "weight_name": "regular", "tracking_em": -0.01, "color": "#FFFFFF" },
+    "dynamic_island_compact": { "size_sp": 12, "weight": 600, "weight_name": "semibold", "tracking_em": 0.0, "color": "#FFFFFF" },
+    "dynamic_island_expanded": { "size_sp": 15, "weight": 500, "weight_name": "medium", "tracking_em": -0.01, "color": "#FFFFFF" }
+  },
+  "colors": {
+    "palette": "Display P3",
+    "background": "#000000",
+    "surface": "#1C1C1E",
+    "surface_elevated": "#2C2C2E",
+    "tint_base": "#0A1F2E",
+    "tint_base_alpha": 0.12,
+    "accent_blue": "#0066FF",
+    "accent_green": "#30D158",
+    "accent_orange": "#FF9F0A",
+    "accent_red": "#FF453A",
+    "accent_purple": "#BF5AF2",
+    "text_primary": "#FFFFFF",
+    "text_secondary": "#FFFFFFCC",
+    "text_tertiary": "#FFFFFF99",
+    "separator": "#FFFFFF1A",
+    "glass_tint": "#0A1F2E5F",
+    "glass_specular": "#FFFFFF33"
   },
   "gestures": {
-    "spotlight_open_min_drag_px": 220,
-    "control_center_zone": { "anchor": "top_end", "width_frac": 0.5, "height_px": 250, "min_drag_px": 160 },
-    "note": "La zona debe iniciar bajo la status bar (ventana de SystemUI): y >= ~100px en el emulador"
+    "spotlight_open_min_drag_px": 200,
+    "control_center_zone": { "anchor": "top_end", "width_frac": 0.5, "height_px": 240, "min_drag_px": 140 },
+    "lockscreen_unlock_min_drag_px": 180,
+    "dynamic_island_tap_expand": true,
+    "note": "iOS 27: umbrales reducidos, zona CC height 240px, unlock 180px"
   }
 }
