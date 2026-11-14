@@ -1,0 +1,23 @@
+# Herramientas, SDKs y clones externos
+tools/
+lineage-src/
+device-dumps/
+
+# Multimedia pesado y headers clonados (conservar solo ios-refs/*.json)
+ios-refs/videos/
+ios-refs/frames/
+ios-refs/headers/
+
+# Artefactos de compilación Android / Gradle
+**/build/
+**/.gradle/
+.gradle/
+.idea/
+*.iml
+local.properties
+*.apk
+*.aab
+*.ap_
+*.dex
+captures/
+.cxx/

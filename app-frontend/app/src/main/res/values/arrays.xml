@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Alcance de hooks del módulo Xposed: modificamos la SystemUI de LineageOS -->
+    <string-array name="xposedscope">
+        <item>com.android.systemui</item>
+    </string-array>
+</resources>

@@ -1,0 +1,104 @@
+{
+  "_meta": {
+    "name": "ios_design_tokens",
+    "generated": "2026-11-14",
+    "target_device": {
+      "model": "POCO M5s (rosemary)",
+      "resolution_px": [1080, 2400],
+      "dpi": 409,
+      "android_density": 2.556,
+      "screen_width_dp": 422.5,
+      "note": "Calibración: 1 iOS pt ≈ 1 Android dp (ambos ≈160 dpi lógicos). px = dp * 2.556"
+    },
+    "sources": [
+      "https://github.com/nst/iOS-Runtime-Headers (PrivateFrameworks/ControlCenterUI, SpringBoardUI)",
+      "CASpringAnimation defaults (QuartzCore, documentación Apple)",
+      "Especificaciones UIKit: UIBlurEffect materials, continuous corners (UIScreentEffect), superellipse n=5",
+      "Frames extraídos de videos de referencia (ios-refs/frames/)"
+    ]
+  },
+  "spring": {
+    "model": "CASpringAnimation (damping/mass/stiffness) ↔ Compose spring(dampingRatio, stiffness)",
+    "conversion": "dampingRatio = damping / (2 * sqrt(stiffness * mass)); Compose stiffness = CA stiffness",
+    "system_defaults": { "mass": 1.0, "stiffness": 100.0, "damping": 10.0, "dampingRatio": 0.5 },
+    "presets": {
+      "icon_press":   { "dampingRatio": 0.65, "stiffness": 500.0, "mass": 1.0, "note": "squash rápido estilo iOS (tap feedback)" },
+      "icon_release": { "dampingRatio": 0.82, "stiffness": 380.0, "mass": 1.0, "note": "rebote sutil al soltar (base actual)" },
+      "page_swipe":   { "dampingRatio": 1.0,  "stiffness": 300.0, "mass": 1.0, "note": "cambio de página: críticamente amortizado, sin rebote" },
+      "overlay_open": { "dampingRatio": 0.725, "stiffness": 170.0, "mass": 1.0, "note": "preset bouncy iOS 17 para módulos del Control Center" },
+      "overlay_close":{ "dampingRatio": 1.0,  "stiffness": 250.0, "mass": 1.0, "note": "cierre sin rebote" },
+      "indicator_dot":{ "dampingRatio": 0.82, "stiffness": 380.0, "mass": 1.0, "note": "puntito de página" }
+    }
+  },
+  "geometry": {
+    "icon_size_dp": 64,
+    "icon_corner_ratio": 0.2237,
+    "icon_corner_superellipse_n": 5.0,
+    "icon_continuous_corner_factor": 1.528655,
+    "grid": {
+      "columns": 4,
+      "rows": 6,
+      "h_margin_dp": 30,
+      "h_gap_dp": 26,
+      "icon_label_size_sp": 11,
+      "label_gap_dp": 5,
+      "row_spacing_dp": 8,
+      "note": "Proporciones iOS home (margin 27pt, gap 27pt, icono 60pt @375pt) escaladas a 422.5dp"
+    },
+    "dock": {
+      "corner_radius_dp": 30,
+      "icon_size_dp": 58,
+      "h_padding_dp": 16,
+      "v_padding_dp": 10,
+      "bottom_margin_dp": 22,
+      "apps_pinned": 4
+    },
+    "spotlight": {
+      "panel_top_padding_dp": 84,
+      "panel_corner_radius_dp": 28,
+      "panel_h_margin_dp": 16,
+      "result_row_height_dp": 56,
+      "result_icon_size_dp": 40
+    },
+    "control_center": {
+      "panel_h_margin_dp": 12,
+      "panel_corner_radius_dp": 32,
+      "module_corner_radius_dp": 24,
+      "module_spacing_dp": 14,
+      "toggle_icon_size_dp": 40,
+      "media_button_size_dp": 52,
+      "slider_track_height_dp": 38
+    }
+  },
+  "material": {
+    " UIBlurEffect": {
+      "systemUltraThinMaterial": { "blur_dp": 32, "saturation_boost": 1.8, "bg_alpha": 0.20 },
+      "systemMaterial":          { "blur_dp": 42, "saturation_boost": 1.8, "bg_alpha": 0.45 },
+      "systemThickMaterial":     { "blur_dp": 56, "saturation_boost": 1.6, "bg_alpha": 0.65 },
+      "note": "Radios calibrados a 409dpi (iOS usa ~30-80px @3x)"
+    },
+    "liquid_glass": {
+      "tint_color": "#142E3A5F",
+      "tint_alpha": 0.08,
+      "edge_refraction_strength": 0.030,
+      "edge_refraction_curvature": 0.10,
+      "chromatic_aberration": 0.006,
+      "specular_edge_intensity": 0.10,
+      "shimmer_amplitude": 0.012,
+      "shimmer_speed": 1.5,
+      "frost_blur_dp": 32,
+      "note": "Refracción tipo lente gruesa: desplazamiento ∝ strength * (0.030 + 0.10*dist²)"
+    }
+  },
+  "curves": {
+    "note": "CCUIAnimationCustomTimingFunctionParameters usa bezier(c1,c2) estilo CAMediaTimingFunction",
+    "ease_in_out":  [0.42, 0.0, 0.58, 1.0],
+    "ease_out":     [0.25, 0.1, 0.25, 1.0],
+    "ios_default":  [0.25, 0.1, 0.25, 1.0]
+  },
+  "gestures": {
+    "spotlight_open_min_drag_px": 220,
+    "control_center_zone": { "anchor": "top_end", "width_frac": 0.5, "height_px": 250, "min_drag_px": 160 },
+    "note": "La zona debe iniciar bajo la status bar (ventana de SystemUI): y >= ~100px en el emulador"
+  }
+}
