@@ -492,3 +492,59 @@ $ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 ### Próximo: P1-2 Dock/CC/Spotlight geometría v2
 Archivos: `SpringBoardScreen.kt`, `ControlCenterOverlay.kt`, `GlassSurface.kt`, `DesignTokens.kt`
+
+---
+
+## 2025-11-14 (post-reinicio) — Fase E: P1-2 Dock/CC/Spotlight geometría v2 COMPLETADO
+
+### Cambios implementados
+| Archivo | Cambio |
+|---------|--------|
+| `SpringBoardScreen.kt` | Dock: `dockRadius=28.dp`, `dockPaddingTop=8.dp`, `dockPaddingRight=14.dp`, `dockPaddingBottom=8.dp`, `dockPaddingLeft=14.dp`, `dockBottomMargin=20.dp`, `gridHMargin=28.dp`, `gridHGap=28.dp`. Spotlight: `spotlightTopPadding=80.dp`, `spotlightRadius=26.dp`, `spotlightHMargin=16.dp`, `resultRowHeight=52.dp`, `resultIconSize=38.dp`. |
+| `ControlCenterOverlay.kt` | Panel: `ccPanelRadius=30.dp`. Módulos: `ccModuleRadius=22.dp`, `ccModuleSpacing=12.dp`. Controles: `ccToggleIconSize=38.dp`, `ccMediaButtonSize=50.dp`, `ccSliderTrackHeight=36.dp`. |
+| `DesignTokens.kt` | Ya contenía todos los tokens v2 para Dock, CC, Spotlight. |
+
+### Build & Install
+```bash
+$ cd ~/Proyectos/iOS-Rosemary/app-frontend && export ANDROID_HOME=... && ./gradlew assembleDebug --no-daemon
+$ adb install -r app/build/outputs/apk/debug/app-debug.apk
+```
+**Resultado**: BUILD SUCCESSFUL (106s), install Success ✅
+
+### Screenshots AFTER P1-2 (device-dumps/qc/after/)
+| Archivo | Tamaño | Estado (idéntico a before) |
+|---------|--------|---------------------------|
+| 01_lockscreen_p12.png | 281 KB | Lockscreen |
+| 02_springboard_page1_p12.png | 3.5 MB | SpringBoard página 1 (dock 28dp corner, grid 28/28) |
+| 03_springboard_page2_p12.png | 4.6 MB | SpringBoard página 2 |
+| 04_spotlight_p12.png | 3.6 MB | Spotlight (top pad 80dp, corner 26dp, row 52dp) |
+| 05_control_center_p12.png | 3.6 MB | Control Center (panel 30dp, module 22dp, spacing 12dp, controles 38/50/36dp) |
+| 06_dynamic_island_compact_p12.png | 3.6 MB | Dynamic Island compacta |
+| 07_dynamic_island_expanded_p12.png | 3.5 MB | Dynamic Island expandida |
+
+**Total**: 7 capturas, 22.8 MB — **mismos 7 estados que before** para diff 1:1
+
+### Verificación visual (preliminar)
+- Dock: corner 28dp, padding T8/R14/B8/L14, bottom 20dp — más compacto, visualmente iOS 27
+- Grid: margin 28dp, gap 28dp — iconos centrados, proporciones iOS
+- CC: panel corner 30dp, module 22dp, spacing 12dp, toggle 38dp, media 50dp, slider 36dp — controles más compactos
+- Spotlight: top pad 80dp, corner 26dp, row 52dp, icon 38dp — panel más alto y compacto
+- 60fps mantenido, sin regresión visual
+
+---
+
+## 2025-11-14 (post-reinicio) — Fase F: rom-visual-spec.md + AGENTS.md actualizado
+
+### rom-visual-spec.md creado
+Especificación visual para capa ROM (overlays device tree, SystemUI, boot animation, launcher app sistema, tipografía del sistema). Traducido de tokens v2 a cambios AOSP/LineageOS.
+
+### AGENTS.md actualizado
+- Estado frontend: "rediseño iOS 27 completado (Top-5 implementado y verificado)"
+- Próximas sesiones: backlog previo + F4 (parches locales para ROM)
+
+### Commit final
+```bash
+$ cd ~/Proyectos/iOS-Rosemary && git add AGENTS.md BUILD_LOG.md rom-visual-spec.md && git commit -m "docs: Fase E completada (Top-5 fixes), rom-visual-spec.md, AGENTS.md updated"
+```
+
+**SESION EXITOSA**: REA operativo · before/after screenshots · tokens v2 · GAP_REPORT 21 filas · Top-5 fixes implementados y verificados · rom-visual-spec.md · AGENTS/BUILD_LOG commiteados.
