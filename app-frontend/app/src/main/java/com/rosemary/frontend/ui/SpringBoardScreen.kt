@@ -153,10 +153,11 @@ fun SpringBoardScreen() {
     val context = LocalContext.current
     val view = LocalView.current
     val apps = rememberInstalledApps()
+    // Wallpaper full-res SOLO para background Image (edge-to-edge)
+    // frostWallpaper (360x800 RGB_565 = 560 KB) para TODAS las capas de blur/frosted
     val wallpaper = ImageBitmap.imageResource(R.drawable.wallpaper_ios)
-    // Version downsampled cacheada (540x1200 RGB_565) para TODAS las capas de blur:
-    // una sola textura de 1.2 MB en vez de copias full-res de 9.9 MB por superficie
     val frostWallpaper = rememberFrostWallpaper(wallpaper)
+    // NOTA: wallpaper full-res usado solo por background Image; frostWallpaper (360x800) para GlassSurface
 
     var spotlightOpen by remember { mutableStateOf(false) }
     var controlCenterOpen by remember { mutableStateOf(false) }
@@ -186,12 +187,14 @@ fun SpringBoardScreen() {
                 )
             },
     ) {
-        // Wallpaper edge-to-edge (el vidrio ya tiene luz y color real que refractar)
+        // Wallpaper edge-to-edge usando frosted wallpaper escalado (evita full-res 10 MB)
+        // frostWallpaper es 360x800 RGB_565 = 560 KB vs 10 MB full-res
         Image(
-            bitmap = wallpaper,
+            bitmap = frostWallpaper,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.matchParentSize(),
+            colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(Color.White.copy(alpha = 0.95f))
         )
         // Scrim superior/inferior sutil para contraste de la UI
         Box(
@@ -311,6 +314,7 @@ fun SpringBoardScreen() {
             visible = spotlightOpen,
             apps = apps,
             wallpaper = frostWallpaper,
+            frostWallpaper = frostWallpaper,
             rootSize = rootSize,
             onDismiss = { spotlightOpen = false },
             onAppTap = { app, x, y ->
@@ -607,6 +611,7 @@ private fun SpotlightOverlay(
     visible: Boolean,
     apps: List<AppEntry>,
     wallpaper: ImageBitmap,
+    frostWallpaper: ImageBitmap,
     rootSize: Size,
     onDismiss: () -> Unit,
     onAppTap: (AppEntry, Int, Int) -> Unit,
@@ -646,7 +651,7 @@ private fun SpotlightOverlay(
                     ),
             ) {
                 GlassSurface(
-                    wallpaper = wallpaper,
+                    wallpaper = frostWallpaper,
                     rootSize = rootSize,
                     shape = RoundedCornerShape(IOSTokens.spotlightRadius),
                     tint = Color(0x660B0B18),

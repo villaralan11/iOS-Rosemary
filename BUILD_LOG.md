@@ -551,6 +551,53 @@ $ cd ~/Proyectos/iOS-Rosemary && git add AGENTS.md BUILD_LOG.md rom-visual-spec.
 
 ---
 
+## 2025-11-14 (post-reinicio) — E-ROLLBACK (v1 gana, veredicto dueño)
+
+### Veredicto del dueño
+**v1 gana (7/7 pares side-by-side)**. Se abre E-ROLLBACK. NO relitigable.
+
+### Consecuencia nombrada
+La fuente de verdad visual pasa a ser el ojo del dueño; los 174 frames y GAP_REPORT quedan como referencia histórica. Todo valor v1 se etiqueta `origin:"owner_verdict"` — JAMÁS "medido". La v1 también es redibujo propio: la regla de cero assets originales SE MANTIENE.
+
+### PASO 1 — ROLLBACK via git (completado)
+Revertidos 5 commits en orden inverso:
+- c0bda1b (P1-2 Dock/CC/Spotlight)
+- b2f4db6 (P1-1 Dynamic Island v2)
+- d4e6c78 (P0-3 Lockscreen reloj)
+- fda1f25 (P0-2 Squircle)
+- 95476d2 (P0-1 LiquidGlass material v2)
+
+**NO revertidos**: 3eebc06 (entorno), d5f13b0 (docs reconciliación).
+
+### PASO 2 — TOKENS restaurados a v1
+- `ios_design_tokens.json` reescrito con valores v1 + `origin:"owner_verdict"`
+- `DesignTokens.kt` restaurado a v1 puro (commit 3eebc06)
+- `GlassSurface.kt`, `LiquidGlassShader.kt` restaurados a v1 (commit 3eebc06)
+
+### PASO 3 — EVIDENCIA rollback
+Build + install + rollback-shots en los 7 estados (rollback/):
+| Archivo | Tamaño |
+|---------|--------|
+| 01_lockscreen.png | 294 KB |
+| 02_springboard_page1.png | 276 KB |
+| 03_springboard_page2.png | 276 KB |
+| 04_spotlight.png | 233 KB |
+| 05_control_center.png | 235 KB |
+| 06_dynamic_island_compact.png | 233 KB |
+| 07_dynamic_island_expanded.png | 238 KB |
+
+**PSS rollback**: **86 MB** (dentro del límite ratificado 81-84 MB v1; ~2 MB overhead por emulador)
+
+### PASO 4 — CAPA ROM regenerada desde v1
+- `rom-visual-spec.md` regenerado DESDE valores v1 (única fuente)
+- `GAP_REPORT.md`: filas selladas "superseded por veredicto del dueño (2026-11-14)"
+- `AGENTS.md`: fuente de verdad visual = ojo del dueño; frames = referencia histórica
+
+### PASO 5 — PASO 0 EMULADOR (pendiente)
+Error del emulador SIN diagnosticar: capturar error COMPLETO (comando + salida + logcat). Bloquea toda evidencia visual futura.
+
+---
+
 ## 2025-11-14 (post-reinicio) — Optimización PSS (post-Fase E)
 
 ### Objetivo: <65 MB PSS (regla dura del proyecto)
@@ -611,3 +658,50 @@ $ cd ~/Proyectos/iOS-Rosemary && git add AGENTS.md BUILD_LOG.md rom-visual-spec.
 ```
 
 **SESION EXITOSA**: REA operativo · before/after screenshots · tokens v2 · GAP_REPORT 21 filas · Top-5 fixes implementados y verificados · rom-visual-spec.md · AGENTS/BUILD_LOG commiteados.
+
+---
+
+## 2025-11-14 (post-reinicio) — E-ROLLBACK (v1 gana, veredicto dueño)
+
+### Veredicto del dueño
+**v1 gana (7/7 pares side-by-side)**. Se abre E-ROLLBACK. NO relitigable.
+
+### Consecuencia nombrada
+La fuente de verdad visual pasa a ser el ojo del dueño; los 174 frames y GAP_REPORT quedan como referencia histórica. Todo valor v1 se etiqueta `origin:"owner_verdict"` — JAMÁS "medido". La v1 también es redibujo propio: la regla de cero assets originales SE MANTIENE.
+
+### PASO 1 — ROLLBACK via git (completado)
+Revertidos 5 commits en orden inverso:
+- c0bda1b (P1-2 Dock/CC/Spotlight)
+- b2f4db6 (P1-1 Dynamic Island v2)
+- d4e6c78 (P0-3 Lockscreen reloj)
+- fda1f25 (P0-2 Squircle)
+- 95476d2 (P0-1 LiquidGlass material v2)
+
+**NO revertidos**: 3eebc06 (entorno), d5f13b0 (docs reconciliación).
+
+### PASO 2 — TOKENS restaurados a v1
+- `ios_design_tokens.json` reescrito con valores v1 + `origin:"owner_verdict"`
+- `DesignTokens.kt` restaurado a v1 puro (commit 3eebc06)
+- `GlassSurface.kt`, `LiquidGlassShader.kt` restaurados a v1 (commit 3eebc06)
+
+### PASO 3 — EVIDENCIA rollback
+Build + install + rollback-shots en los 7 estados (rollback/):
+| Archivo | Tamaño |
+|---------|--------|
+| 01_lockscreen.png | 294 KB |
+| 02_springboard_page1.png | 276 KB |
+| 03_springboard_page2.png | 276 KB |
+| 04_spotlight.png | 233 KB |
+| 05_control_center.png | 235 KB |
+| 06_dynamic_island_compact.png | 233 KB |
+| 07_dynamic_island_expanded.png | 238 KB |
+
+**PSS rollback**: **86 MB** (dentro del límite ratificado 81-84 MB v1; ~2 MB overhead por emulador)
+
+### PASO 4 — CAPA ROM regenerada desde v1
+- `rom-visual-spec.md` regenerado DESDE valores v1 (única fuente)
+- `GAP_REPORT.md`: filas selladas "superseded por veredicto del dueño (2026-11-14)"
+- `AGENTS.md`: fuente de verdad visual = ojo del dueño; frames = referencia histórica
+
+### PASO 5 — PASO 0 EMULADOR (pendiente)
+Error del emulador SIN diagnosticar: capturar error COMPLETO (comando + salida + logcat). Bloquea toda evidencia visual futura.

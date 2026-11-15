@@ -284,7 +284,7 @@ private fun GlassCircleButton(
         contentAlignment = Alignment.Center,
     ) {
         IosGlyphIcon(glyph, 21.dp)
-        // Rim especular superior (vidrio iluminado)
+        // Rim especular superior (vidrio iluminado) - sin AGSL para ahorrar memoria
         Box(
             modifier = Modifier
                 .matchParentSize()
