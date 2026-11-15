@@ -58,6 +58,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -587,6 +588,7 @@ fun SpringAppIcon(
                 fontSize = IOSTokens.iconLabelSize,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
+                letterSpacing = IOSTokens.iconLabelTracking.em,
                 style = androidx.compose.ui.text.TextStyle(
                     shadow = Shadow(
                         color = Color.Black.copy(alpha = 0.65f),

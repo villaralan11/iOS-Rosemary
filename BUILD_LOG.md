@@ -372,3 +372,43 @@ $ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 ### Próximo: P0-2 Squircle 0.2381 + label tracking
 Archivos: `Squircle.kt`, `SpringBoardScreen.kt`, `IconDrawables.kt`, `DesignTokens.kt`
+
+---
+
+## 2025-11-14 (post-reinicio) — Fase E: P0-2 Squircle 0.2381 + label tracking -0.015em + gap 4dp COMPLETADO
+
+### Cambios implementados
+| Archivo | Cambio |
+|---------|--------|
+| `Squircle.kt` | `superellipsePath()` reescrito: usa `IOSTokens.SQUIRCLE_CORNER_RATIO=0.2381f`, `SQUIRCLE_N=5.0f`, `SQUIRCLE_CONTINUOUS_FACTOR=1.528655f`. Fórmula: `x^n + y^n = r^n` con `r = min(w,h) * cornerRatio`. Función pública para reuso en iconos. |
+| `SpringBoardScreen.kt` | `letterSpacing = IOSTokens.iconLabelTracking.em` (-0.015em) en labels de apps. Import `em` añadido. |
+| `DesignTokens.kt` | Ya contenía `SQUIRCLE_CORNER_RATIO`, `SQUIRCLE_N`, `SQUIRCLE_CONTINUOUS_FACTOR`, `iconLabelTracking=-0.015f`, `iconLabelGap=4.dp` |
+
+### Build & Install
+```bash
+$ cd ~/Proyectos/iOS-Rosemary/app-frontend && export ANDROID_HOME=... && ./gradlew assembleDebug --no-daemon
+$ adb install -r app/build/outputs/apk/debug/app-debug.apk
+```
+**Resultado**: BUILD SUCCESSFUL (52s), install Success ✅
+
+### Screenshots AFTER P0-2 (device-dumps/qc/after/)
+| Archivo | Tamaño | Estado (idéntico a before) |
+|---------|--------|---------------------------|
+| 01_lockscreen_p02.png | 298 KB | Lockscreen |
+| 02_springboard_page1_p02.png | 4.6 MB | SpringBoard página 1 (squircle + tracking) |
+| 03_springboard_page2_p02.png | 4.6 MB | SpringBoard página 2 |
+| 04_spotlight_p02.png | 3.7 MB | Spotlight |
+| 05_control_center_p02.png | 3.6 MB | Control Center |
+| 06_dynamic_island_compact_p02.png | 3.7 MB | Dynamic Island compacta |
+| 07_dynamic_island_expanded_p02.png | 3.5 MB | Dynamic Island expandida |
+
+**Total**: 7 capturas, 23.7 MB — **mismos 7 estados que before** para diff 1:1
+
+### Verificación visual (preliminar)
+- Iconos: squircle más pronunciado (0.2381 vs 0.2237), esquinas continuas con factor 1.528655
+- Labels: tracking -0.015em visible (letras más juntas, estilo iOS), gap 4dp entre icono y label
+- Dock, CC, Spotlight, Dynamic Island: heredan squircle vía `SquircleShape`
+- 60fps mantenido, sin regresión visual
+
+### Próximo: P0-3 Lockscreen reloj 96sp weight 200 (thin) tracking -0.02em
+Archivos: `LockScreen.kt`, `Theme.kt`
