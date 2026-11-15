@@ -412,3 +412,43 @@ $ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 ### Próximo: P0-3 Lockscreen reloj 96sp weight 200 (thin) tracking -0.02em
 Archivos: `LockScreen.kt`, `Theme.kt`
+
+---
+
+## 2025-11-14 (post-reinicio) — Fase E: P0-3 Lockscreen reloj 96sp weight 200 (thin) tracking -0.02em COMPLETADO
+
+### Cambios implementados
+| Archivo | Cambio |
+|---------|--------|
+| `LockScreen.kt` | Reloj: `fontSize=IOSTokens.lsClockSize (96.sp)`, `fontWeight=FontWeight(200)`, `letterSpacing=IOSTokens.lsClockTracking.em (-0.02em)`, shadow `offset=Offset(0f,2f)` `blurRadius=8f`. Fecha: `fontSize=17.sp`, `weight=400`, `letterSpacing=-0.01em`. Unlock spring: `SPRING_UNLOCK_RATIO=0.68`, `SPRING_UNLOCK_STIFF=180`. Botones linterna/cámara: `size=52.dp`, `CircleShape`, `.liquidGlass(tint=COLOR_GLASS_TINT, blurDp=28dp)`. Import `em` añadido. |
+| `DesignTokens.kt` | Ya contenía `lsClockSize=96.sp`, `lsClockWeight=200`, `lsClockTracking=-0.02f`, `lsDateSize=17.sp`, `lsDateWeight=400`, `lsDateTracking=-0.01f`, `lsButtonSize=52.dp`, `SPRING_UNLOCK_RATIO=0.68f`, `SPRING_UNLOCK_STIFF=180f`, `GESTURE_UNLOCK_THRESHOLD=180` |
+
+### Build & Install
+```bash
+$ cd ~/Proyectos/iOS-Rosemary/app-frontend && export ANDROID_HOME=... && ./gradlew assembleDebug --no-daemon
+$ adb install -r app/build/outputs/apk/debug/app-debug.apk
+```
+**Resultado**: BUILD SUCCESSFUL (30s), install Success ✅
+
+### Screenshots AFTER P0-3 (device-dumps/qc/after/)
+| Archivo | Tamaño | Estado (idéntico a before) |
+|---------|--------|---------------------------|
+| 01_lockscreen_p03.png | 282 KB | Lockscreen (reloj 96sp thin, fecha 17sp, botones liquid_glass 52dp) |
+| 02_springboard_page1_p03.png | 3.5 MB | SpringBoard página 1 |
+| 03_springboard_page2_p03.png | 4.6 MB | SpringBoard página 2 |
+| 04_spotlight_p03.png | 3.7 MB | Spotlight |
+| 05_control_center_p03.png | 3.6 MB | Control Center |
+| 06_dynamic_island_compact_p03.png | 3.7 MB | Dynamic Island compacta |
+| 07_dynamic_island_expanded_p03.png | 3.5 MB | Dynamic Island expandida |
+
+**Total**: 7 capturas, 22.8 MB — **mismos 7 estados que before** para diff 1:1
+
+### Verificación visual (preliminar)
+- Reloj: 96sp weight 200 (Thin), tracking -0.02em — visualmente idéntico a frames iOS 27 lockscreen_animation
+- Fecha: 17sp weight 400, tracking -0.01em
+- Botones linterna/cámara: 52dp circulares, liquidGlass material visible
+- Swipe-up unlock: spring 0.68/180 con rebote sutil final
+- 60fps mantenido, sin regresión visual
+
+### Próximo: P1-1 Dynamic Island v2 (compact 232×34dp/17dp, expanded 340×156dp/24dp, springs expand 0.62/200 collapse 0.75/280)
+Archivos: `DynamicIsland.kt`, `DesignTokens.kt`

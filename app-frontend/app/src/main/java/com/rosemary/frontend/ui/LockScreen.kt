@@ -56,6 +56,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -140,19 +141,19 @@ fun LockScreen(
                         scope.launch { offsetY.snapTo(offsetY.value + amount) }
                     },
                     onDragEnd = {
-                        if (offsetY.value < -240f) {
+                        if (offsetY.value < -IOSTokens.GESTURE_UNLOCK_THRESHOLD.toFloat()) {
                             scope.launch {
-                                offsetY.animateTo(-fullHeight, spring(dampingRatio = 1f, stiffness = 260f))
+                                offsetY.animateTo(-fullHeight, spring(dampingRatio = IOSTokens.SPRING_UNLOCK_RATIO, stiffness = IOSTokens.SPRING_UNLOCK_STIFF))
                                 onUnlock()
                             }
                         } else {
                             scope.launch {
-                                offsetY.animateTo(0f, spring(dampingRatio = 0.7f, stiffness = 320f))
+                                offsetY.animateTo(0f, spring(dampingRatio = IOSTokens.SPRING_UNLOCK_RATIO, stiffness = IOSTokens.SPRING_UNLOCK_STIFF))
                             }
                         }
                     },
                     onDragCancel = {
-                        scope.launch { offsetY.animateTo(0f, spring(dampingRatio = 0.7f, stiffness = 320f)) }
+                        scope.launch { offsetY.animateTo(0f, spring(dampingRatio = IOSTokens.SPRING_UNLOCK_RATIO, stiffness = IOSTokens.SPRING_UNLOCK_STIFF)) }
                     },
                 )
             },
@@ -198,19 +199,21 @@ fun LockScreen(
                 Text(
                     date.replaceFirstChar { it.uppercase() },
                     color = Color.White.copy(alpha = 0.92f),
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.SemiBold,
+                    fontSize = IOSTokens.lsDateSize,
+                    fontWeight = FontWeight(IOSTokens.lsDateWeight),
+                    letterSpacing = IOSTokens.lsDateTracking.em,
                 )
                 Text(
                     time,
                     color = Color.White.copy(alpha = 0.80f),
-                    fontSize = 118.sp,
-                    fontWeight = FontWeight.Light,
-                    letterSpacing = (-2).sp,
+                    fontSize = IOSTokens.lsClockSize,
+                    fontWeight = FontWeight(IOSTokens.lsClockWeight),
+                    letterSpacing = IOSTokens.lsClockTracking.em,
                     style = androidx.compose.ui.text.TextStyle(
                         shadow = Shadow(
-                            color = Color.Black.copy(alpha = 0.25f),
-                            blurRadius = 24f,
+                            color = Color.Black.copy(alpha = 0.50f),
+                            blurRadius = 8f,
+                            offset = Offset(0f, 2f),
                         ),
                     ),
                     modifier = Modifier.padding(top = 4.dp),
@@ -275,12 +278,17 @@ private fun GlassCircleButton(
 ) {
     Box(
         modifier = Modifier
-            .size(52.dp)
+            .size(IOSTokens.lsButtonSize)
             .clip(CircleShape)
             .background(
                 if (active) Color.White.copy(alpha = 0.42f) else Color.White.copy(alpha = 0.14f)
             )
-            .clickable { onTap() },
+            .clickable { onTap() }
+            .liquidGlass(
+                tint = Color(IOSTokens.COLOR_GLASS_TINT),
+                blurDp = IOSTokens.GLASS_FROST_BLUR_DP.dp,
+                strength = 1f,
+            ),
         contentAlignment = Alignment.Center,
     ) {
         IosGlyphIcon(glyph, 21.dp)
