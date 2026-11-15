@@ -153,7 +153,7 @@ fun ControlCenterOverlay(
                 ) {
                 Column(
                     modifier = Modifier.padding(18.dp),
-                    verticalArrangement = Arrangement.spacedBy(IOSTokens.ccModuleSpacing),
+                    verticalArrangement = Arrangement.spacedBy(14.dp),
                 ) {
             // ==== Brillo ====
             GlassCard {
