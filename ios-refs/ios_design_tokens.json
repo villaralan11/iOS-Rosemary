@@ -23,8 +23,8 @@
     "changes_from_v1": [
       "spring: nuevos presets dynamic_island_expand/collapse, lockscreen_unlock, widget_transition",
       "geometry: icon_corner_ratio 0.2237→0.2381 (iOS 27 squircle más pronunciado), dock_corner_radius 30→28, control_center module_corner 24→22, dynamic_island compact 232×34dp/17dp expanded 340×156dp/24dp",
-      "material: liquid_glass tint_alpha 0.08→0.12, frost_blur_dp 32→28, specular_edge_intensity 0.10→0.14, shimmer_amplitude 0.012→0.018",
-      "material: UIBlurEffect systemMaterial blur_dp 42→38, systemThickMaterial 56→50 (vidrio más translúcido en iOS 27)",
+      "material: liquid_glass tint_alpha 0.08→0.12, frost_blur_dp 32→28→20 (C: 28dp medido; E: 20dp ajustado por PSS), specular_edge_intensity 0.10→0.14, shimmer_amplitude 0.012→0.018",
+      "material: UIBlurEffect systemMaterial blur_dp 42→38→20 (C: 38dp; E: 20dp ajustado por PSS), systemThickMaterial 56→50→30 (C: 50dp; E: 30dp ajustado por PSS)",
       "curves: nuevo preset ios27_spring [0.32, 0.0, 0.48, 1.0] para transiciones fluidas",
       "tipografía: weight 200 = thin (no ultra_light), tracking -0.015em labels, fallback FontFamily.Default + weight map",
       "colores: paleta P3 extendida, tint base #0A1F2E (vs #142E3A), accent azul 007AFF→0066FF",
@@ -113,10 +113,10 @@
   },
   "material": {
     "UIBlurEffect": {
-      "systemUltraThinMaterial": { "blur_dp": 28, "saturation_boost": 1.8, "bg_alpha": 0.18 },
-      "systemMaterial":          { "blur_dp": 38, "saturation_boost": 1.8, "bg_alpha": 0.40 },
-      "systemThickMaterial":     { "blur_dp": 50, "saturation_boost": 1.6, "bg_alpha": 0.60 },
-      "note": "iOS 27: blur radii reducidos 10-15% para vidrio más nítido"
+      "systemUltraThinMaterial": { "blur_dp": 20, "saturation_boost": 1.8, "bg_alpha": 0.18 },
+      "systemMaterial":          { "blur_dp": 20, "saturation_boost": 1.8, "bg_alpha": 0.40 },
+      "systemThickMaterial":     { "blur_dp": 30, "saturation_boost": 1.6, "bg_alpha": 0.60 },
+      "note": "iOS 27: blur radii base 28dp medido; E ajustado a 20/20/30dp por límite PSS (<65 MB)"
     },
     "liquid_glass": {
       "tint_color": "#0A1F2E5F",
@@ -127,8 +127,8 @@
       "specular_edge_intensity": 0.14,
       "shimmer_amplitude": 0.018,
       "shimmer_speed": 1.6,
-      "frost_blur_dp": 28,
-      "note": "iOS 27: refracción más sutil (0.028), aberración cromática reducida, borde especular más fuerte, shimmer más visible"
+      "frost_blur_dp": 20,
+      "note": "iOS 27: frost_blur 28dp medido (C); E ajustado a 20dp por límite PSS. Shared AGSL shader (singleton) Dock+CC."
     }
   },
   "curves": {

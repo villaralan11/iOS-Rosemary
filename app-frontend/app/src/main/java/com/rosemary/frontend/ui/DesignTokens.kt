@@ -93,15 +93,15 @@ object IOSTokens {
     val lsButtonCornerRatio = 0.5f
 
     // ===== Materiales (UIBlurEffect calibrado a 409 dpi) =====
-    val frostUltraThin = 28.dp   // systemUltraThinMaterial
-    val frostRegular = 38.dp     // systemMaterial
-    val frostThick = 50.dp       // systemThickMaterial
+    val frostUltraThin = 20.dp   // systemUltraThinMaterial (reducido para memoria)
+    val frostRegular = 20.dp     // systemMaterial (reducido para memoria)
+    val frostThick = 30.dp       // systemThickMaterial (reducido para memoria)
     // Aliases compatibilidad
     val frostThin = frostUltraThin
 
     // ===== Liquid Glass (shader) =====
     const val GLASS_TINT_ALPHA = 0.12f
-    const val GLASS_FROST_BLUR_DP = 28f
+    const val GLASS_FROST_BLUR_DP = 20f
     const val GLASS_CHROMATIC_ABERRATION = 0.005f
     const val GLASS_SPECULAR_INTENSITY = 0.14f
     const val GLASS_SHIMMER_AMPLITUDE = 0.018f

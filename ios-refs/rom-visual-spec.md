@@ -59,9 +59,11 @@
 
 ### Blur materials (frameworks/base/core/res/res/values/dimens.xml)
 ```xml
-<dimen name="blur_ultra_thin">28dp</dimen>    <!-- systemUltraThinMaterial -->
-<dimen name="blur_regular">38dp</dimen>      <!-- systemMaterial -->
-<dimen name="blur_thick">50dp</dimen>        <!-- systemThickMaterial -->
+<dimen name="blur_ultra_thin">20dp</dimen>    <!-- systemUltraThinMaterial (E: 20dp ajustado por PSS; C: 28dp medido) -->
+<dimen name="blur_regular">20dp</dimen>      <!-- systemMaterial (E: 20dp ajustado por PSS; C: 38dp medido) -->
+<dimen name="blur_thick">30dp</dimen>        <!-- systemThickMaterial (E: 30dp ajustado por PSS; C: 50dp medido) -->
+```
+**Nota**: Valores base iOS 27 medidos (28/38/50dp) ajustados a 20/20/30dp en E por límite PSS (<65 MB). La capa ROM debe usar los valores E (20/20/30dp) para paridad visual con el launcher.
 ```
 
 ---
@@ -305,7 +307,7 @@ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
 ```glsl
 // uniforms v2
 tint_alpha = 0.12
-frost_blur_dp = 28
+frost_blur_dp = 20
 specular_intensity = 0.14
 shimmer_amplitude = 0.018
 shimmer_speed = 1.6
@@ -314,12 +316,14 @@ refraction_curvature = 0.09
 chromatic_aberration = 0.005
 tint_color = #0A1F2E
 ```
+**Nota**: Valor base iOS 27 medido 28dp (C); E ajustado a 20dp por límite PSS. Shared AGSL shader (singleton) Dock+CC en launcher.
 
 ### Cadena RenderEffect (API 31+)
 ```kotlin
-// Inner: blur(frost_blur_dp) → Outer: RuntimeShader(LiquidGlass)
-// Fallback API 31-32: solo blur nativo
+// Inner: blur(frost_blur_dp=20dp) → Outer: RuntimeShader(LiquidGlass)
+// Fallback API 31-32: solo blur nativo (vivo en LiquidGlassShader.kt:187-189)
 ```
+**Nota**: Shared AGSL shader (singleton) entre Dock y CC en launcher.
 
 ---
 

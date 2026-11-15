@@ -576,7 +576,23 @@ Para bajar de **65 MB PSS** haría falta:
 ### Decisión: **Aceptar PSS ~81-84 MB** (mejor que 116 MB inicial, pero >65 MB objetivo)
 - Paridad visual iOS 27 **COMPLETADA** (Top-5 fixes verificados)
 - 60fps mantenido, sin regresión visual
-- Documentado como límite conocido para Fase F (ROM)
+- **Límite ratificado por el dueño (2026-11-14)**: PSS 81-84 MB aceptado como v1; re-medición obligatoria en hardware real post-flash (F6). Disparadores de revisión: jank perceptible en transiciones CC/scroll. Backlog v2: toggle "modo esencial" para apagar LiquidGlass en CC si se requiere.
+- Documentado como límite conocido para Fase F (ROM).
+
+### Reconciliación frost/blur (28dp → 20dp)
+- **D (GAP_REPORT)**: `frost_blur_dp: 28` (medido en frames oficiales iOS 27)
+- **E (Tabla Top-5 / DesignTokens.kt / GlassSurface.kt)**: `20dp` (ajustado por límite PSS)
+- **JSON v2 actualizado**: `liquid_glass.frost_blur_dp = 20`, `UIBlurEffect.systemUltraThinMaterial = 20`, `systemMaterial = 20`, `systemThickMaterial = 30`
+- **Nota en _meta.changes_from_v1**: "frost_blur_dp 32→28→20 (C: 28dp medido; E: 20dp ajustado por PSS)"
+- **Valor final embarcado**: **20dp** (único valor en json + DesignTokens.kt)
+
+### Fallback AGSL 31-32: VIVO (nivel código)
+- `LiquidGlassShader.kt:187-189` — `else { /* Fallback API 31–32: blur nativo + tinte */ }` confirmado vivo.
+- Probado en emulador API 34 (rama TIRAMISU+); rama else no ejecutada pero compilada y sin errores.
+
+### Shallow sync ~/android/lineage
+- **Estado**: No iniciado (directorio no existe)
+- **Disco libre /home**: 161 GB (suficiente para sync shallow + blobs)
 
 ---
 
