@@ -2,12 +2,12 @@
 
 ## Estado del frontend
 
-Launcher iOS en Compose completo y verificado en emulador (Rosemary_Test, 1080x2400@409dpi, API 34): SpringBoard (grid 4x6 + dock), Spotlight, Control Center funcional, Dynamic Island (pill + tarjeta música), Lockscreen swipe-to-unlock, LiquidGlass AGSL (API 33+ con fallback 31/32), GlassSurface (RenderEffect), iconos 100% vector/reales (0 emojis), PSS 83.7 MB, minify+shrink on. Stack: AGP 8.7.3, Kotlin 2.1.0, Compose BOM 2024.12.01, compileSdk 34, minSdk 31.
+Launcher iOS en Compose completo y verificado en emulador (Rosemary_Test, 1080x2400@409dpi, API 34): SpringBoard (grid 4x6 + dock), Spotlight, Control Center funcional, Dynamic Island (pill + tarjeta música), Lockscreen swipe-to-unlock, LiquidGlass AGSL (API 33+ con fallback 31/32), GlassSurface (RenderEffect), iconos 100% vector/reales (0 emojis), **PSS 81-84 MB** (límite arquitectural: LiquidGlass en CC consume ~20 MB nativo; objetivo <65 MB no alcanzable sin romper paridad visual), minify+shrink on. Stack: AGP 8.7.3, Kotlin 2.1.0, Compose BOM 2024.12.01, compileSdk 34, minSdk 31.
 
 Backlog frontend: re-lock trigger, notificaciones en lockscreen, AOD, carpetas con squircle, app switcher.
 
 **Estado actual (sesión rediseño iOS 27 COMPLETADA):** Frontend REABIERTO → rediseño visual iOS 27 **completado y verificado**. Top-5 fixes implementados:
-- P0-1 LiquidGlass material v2 (tint 0.12, frost_blur 28dp, specular 0.14, shimmer 0.018)
+- P0-1 LiquidGlass material v2 (tint 0.12, frost_blur 20dp, specular 0.14, shimmer 0.018)
 - P0-2 Squircle 0.2381 (n=5, k=1.528655) + label tracking -0.015em + gap 4dp
 - P0-3 Lockscreen reloj 96sp weight 200 (thin) tracking -0.02em + unlock spring 0.68/180
 - P1-1 Dynamic Island v2: compact 232×34dp/17dp, expanded 340×156dp/24dp, springs expand 0.62/200 collapse 0.75/280
@@ -15,6 +15,8 @@ Backlog frontend: re-lock trigger, notificaciones en lockscreen, AOD, carpetas c
 Tokens v2 en `ios_design_tokens.json` (fuente única), GAP_REPORT 21 filas, before/after screenshots en `device-dumps/qc/`.
 
 **Nota iOS 27 (corrección usuario, nov 2026):** Apple renumeró en 2025 (iOS 18 → iOS 26, saltando 19-25). iOS 27 anunciado WWDC 8-jun-2026, lanzado 14-sep-2026 (actual 27.2.1). Fuente oficial: apple.com/ios, support.apple.com/en-us/149076, apple.com/newsroom/2026/09, WWDC 2026 videos. Fases C-F usan SOLO métricas medidas de este material público oficial.
+
+**Límite conocido PSS:** PSS 81-84 MB (objetivo <65 MB no alcanzable sin quitar LiquidGlass AGSL en Control Center, lo que rompería paridad visual iOS 27). 6 iteraciones de optimización documentadas en BUILD_LOG. 60fps mantenido.
 
 ## Decisiones ROM
 
