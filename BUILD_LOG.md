@@ -332,3 +332,43 @@ $ adb install -r app/build/outputs/apk/debug/app-debug.apk
 | 5 | Dock (28dp corner, T8/R14/B8/L14, bottom 20) + CC (30/22/12) + Spotlight (80/26/52/38) | P1 | `SpringBoardScreen.kt`, `ControlCenterOverlay.kt`, `GlassSurface.kt`, `DesignTokens.kt` |
 
 **Listo para Fase E** — un fix a la vez, commit por fix, after-shots estados idénticos a before.
+
+---
+
+## 2025-11-14 (post-reinicio) — Fase E: P0-1 LiquidGlass material v2 COMPLETADO
+
+### Cambios implementados
+| Archivo | Cambio |
+|---------|--------|
+| `DesignTokens.kt` | Tokens v2: `GLASS_TINT_ALPHA=0.12f`, `GLASS_FROST_BLUR_DP=28f`, `GLASS_SPECULAR_INTENSITY=0.14f`, `GLASS_SHIMMER_AMPLITUDE=0.018f`, `GLASS_SHIMMER_SPEED=1.6f`, `GLASS_REFRACTION_STRENGTH=0.028f`, `GLASS_REFRACTION_CURVATURE=0.09f`, `GLASS_CHROMATIC_ABERRATION=0.005f`, `COLOR_TINT_BASE=0xFF0A1F2E`, `COLOR_ACCENT_BLUE=0xFF0066FF`, `frostUltraThin=28.dp`, `frostRegular=38.dp`, `frostThick=50.dp` |
+| `LiquidGlassShader.kt` | AGSL shader v2: uniforms añadidos (`uChromaticAberration`, `uRefractionStrength`, `uRefractionCurvature`, `uShimmerAmplitude`, `uShimmerSpeed`), fórmula refracción `r = strength * (refractionStrength + refractionCurvature * dist²)`, tinte desde token `COLOR_GLASS_TINT` |
+| `GlassSurface.kt` | Defaults v2: `tint=COLOR_GLASS_TINT`, `frost=frostUltraThin`, `liquidGlass(blurDp=GLASS_FROST_BLUR_DP.dp)` |
+
+### Build & Install
+```bash
+$ cd ~/Proyectos/iOS-Rosemary/app-frontend && export ANDROID_HOME=... && ./gradlew assembleDebug --no-daemon
+$ adb install -r app/build/outputs/apk/debug/app-debug.apk
+```
+**Resultado**: BUILD SUCCESSFUL (40s), install Success ✅
+
+### Screenshots AFTER (device-dumps/qc/after/)
+| Archivo | Tamaño | Estado (idéntico a before) |
+|---------|--------|---------------------------|
+| 01_lockscreen.png | 299 KB | Lockscreen |
+| 02_springboard_page1.png | 3.8 MB | SpringBoard página 1 |
+| 03_springboard_page2.png | 3.9 MB | SpringBoard página 2 |
+| 04_spotlight.png | 3.2 MB | Spotlight |
+| 05_control_center.png | 3.1 MB | Control Center |
+| 06_dynamic_island_compact.png | 3.2 MB | Dynamic Island compacta |
+| 07_dynamic_island_expanded.png | 3.0 MB | Dynamic Island expandida |
+
+**Total**: 7 capturas, 20.1 MB — **mismos 7 estados que before** para diff 1:1
+
+### Verificación visual (preliminar)
+- Dock, CC, Spotlight, Dynamic Island: vidrio más visible (tint_alpha 0.12), borde especular más fuerte, shimmer animado perceptible
+- Blur radius 28dp vs 32dp anterior: vidrio más nítido, menos "lechoso"
+- Fallback API 31-32 probado: blur nativo funciona, sin crash
+- PSS: pendiente medición (target <65 MB)
+
+### Próximo: P0-2 Squircle 0.2381 + label tracking
+Archivos: `Squircle.kt`, `SpringBoardScreen.kt`, `IconDrawables.kt`, `DesignTokens.kt`
