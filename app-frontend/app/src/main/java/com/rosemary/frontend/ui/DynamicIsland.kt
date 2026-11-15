@@ -46,10 +46,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 /**
- * Dynamic Island interactiva (referencia: ios-refs/frames/dynamic_island/).
- * Reposo: píldora negra compacta con lente de cámara (punto sutil a la derecha).
- * Expandida (tap): spring elástico -> carátula + onda de audio animada + batería.
- * En iOS la isla es vidrio real negro: píldora sólida con rim especular superior.
+ * Dynamic Island iOS 27 (referencia: ios-refs/frames/dynamic_island_iphone18pro/).
+ * Compacta: 232×34dp, corner 17dp (pill: 2 semicírculos 17dp + rect central 198dp).
+ * Expandida: 340×156dp, corner 24dp.
+ * Springs: expand 0.62/200, collapse 0.75/280.
  */
 @Composable
 fun DynamicIsland(
@@ -59,18 +59,22 @@ fun DynamicIsland(
     val visible = rememberAppVisible()
     var expanded by remember { mutableStateOf(false) }
 
-    val springSpec = spring<Dp>(
-        dampingRatio = 0.62f,          // elástico estilo "island pop"
-        stiffness = 220f,
+    val springExpand = spring<Dp>(
+        dampingRatio = IOSTokens.SPRING_DI_EXPAND_RATIO,
+        stiffness = IOSTokens.SPRING_DI_EXPAND_STIFF,
+    )
+    val springCollapse = spring<Dp>(
+        dampingRatio = IOSTokens.SPRING_DI_COLLAPSE_RATIO,
+        stiffness = IOSTokens.SPRING_DI_COLLAPSE_STIFF,
     )
     val width by animateDpAsState(
-        if (expanded) 330.dp else 118.dp,
-        animationSpec = springSpec,
+        if (expanded) IOSTokens.diExpandedWidth else IOSTokens.diCompactWidth,
+        animationSpec = if (expanded) springExpand else springCollapse,
         label = "islandW",
     )
     val height by animateDpAsState(
-        if (expanded) 164.dp else 37.dp,
-        animationSpec = springSpec,
+        if (expanded) IOSTokens.diExpandedHeight else IOSTokens.diCompactHeight,
+        animationSpec = if (expanded) springExpand else springCollapse,
         label = "islandH",
     )
 
@@ -84,12 +88,12 @@ fun DynamicIsland(
             modifier = Modifier
                 .width(width)
                 .height(height)
-                .clip(RoundedCornerShape(50))
+                .clip(RoundedCornerShape(if (expanded) IOSTokens.diExpandedRadius else IOSTokens.diCompactRadius))
                 .background(Color(0xFF07070A))
                 // Rim especular superior (vidrio negro iluminado desde arriba)
                 .background(
                     Brush.verticalGradient(
-                        0f to Color.White.copy(alpha = 0.10f),
+                        0f to Color.White.copy(alpha = 0.14f),
                         0.09f to Color.Transparent,
                     )
                 )
@@ -103,7 +107,7 @@ fun DynamicIsland(
             if (expanded) {
                 IslandExpandedContent(isCharging, batteryPct, visible)
             } else {
-                // Reposo: lente de cámara a la derecha (como en los frames)
+                // Reposo: lente de cámara a la derecha (pill compacta 232×34dp)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,

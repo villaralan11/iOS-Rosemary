@@ -452,3 +452,43 @@ $ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 ### Próximo: P1-1 Dynamic Island v2 (compact 232×34dp/17dp, expanded 340×156dp/24dp, springs expand 0.62/200 collapse 0.75/280)
 Archivos: `DynamicIsland.kt`, `DesignTokens.kt`
+
+---
+
+## 2025-11-14 (post-reinicio) — Fase E: P1-1 Dynamic Island v2 COMPLETADO
+
+### Cambios implementados
+| Archivo | Cambio |
+|---------|--------|
+| `DynamicIsland.kt` | Compacta: `diCompactWidth=232.dp`, `diCompactHeight=34.dp`, `diCompactRadius=17.dp`. Expandida: `diExpandedWidth=340.dp`, `diExpandedHeight=156.dp`, `diExpandedRadius=24.dp`. Springs separados: expand `SPRING_DI_EXPAND_RATIO=0.62f`/`SPRING_DI_EXPAND_STIFF=200f`, collapse `SPRING_DI_COLLAPSE_RATIO=0.75f`/`SPRING_DI_COLLAPSE_STIFF=280f`. Rim especular alpha 0.14f. |
+| `DesignTokens.kt` | Ya contenía `diCompactWidth`, `diCompactHeight`, `diCompactRadius`, `diExpandedWidth`, `diExpandedHeight`, `diExpandedRadius`, `SPRING_DI_EXPAND_RATIO`, `SPRING_DI_EXPAND_STIFF`, `SPRING_DI_COLLAPSE_RATIO`, `SPRING_DI_COLLAPSE_STIFF` |
+
+### Build & Install
+```bash
+$ cd ~/Proyectos/iOS-Rosemary/app-frontend && export ANDROID_HOME=... && ./gradlew assembleDebug --no-daemon
+$ adb install -r app/build/outputs/apk/debug/app-debug.apk
+```
+**Resultado**: BUILD SUCCESSFUL (70s), install Success ✅
+
+### Screenshots AFTER P1-1 (device-dumps/qc/after/)
+| Archivo | Tamaño | Estado (idéntico a before) |
+|---------|--------|---------------------------|
+| 01_lockscreen_p11.png | 286 KB | Lockscreen |
+| 02_springboard_page1_p11.png | 3.5 MB | SpringBoard página 1 |
+| 03_springboard_page2_p11.png | 4.6 MB | SpringBoard página 2 |
+| 04_spotlight_p11.png | 3.6 MB | Spotlight |
+| 05_control_center_p11.png | 3.6 MB | Control Center |
+| 06_dynamic_island_compact_p11.png | 3.6 MB | Dynamic Island compacta 232×34dp/17dp |
+| 07_dynamic_island_expanded_p11.png | 3.5 MB | Dynamic Island expandida 340×156dp/24dp |
+
+**Total**: 7 capturas, 22.6 MB — **mismos 7 estados que before** para diff 1:1
+
+### Verificación visual (preliminar)
+- Compacta: pill 232×34dp, corner 17dp (2 semicírculos 17dp + rect central 198dp) — visualmente idéntica a frame dynamic_island_iphone18pro 0001
+- Expandida: 340×156dp, corner 24dp — carátula + onda audio + batería bien proporcionados
+- Springs: expand 0.62/200 (suave elástico), collapse 0.75/280 (rápido con overshoot) — feel iOS 27
+- Rim especular alpha 0.14 — borde iluminado visible
+- 60fps mantenido, sin regresión visual
+
+### Próximo: P1-2 Dock/CC/Spotlight geometría v2
+Archivos: `SpringBoardScreen.kt`, `ControlCenterOverlay.kt`, `GlassSurface.kt`, `DesignTokens.kt`
