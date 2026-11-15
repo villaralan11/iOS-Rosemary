@@ -81,7 +81,7 @@ fun rememberFrostWallpaper(wallpaper: ImageBitmap): ImageBitmap {
 }
 
 /**
- * Superficie de vidrio esmerilado real iOS 27: dibuja una copia ALINEADA del wallpaper
+ * Superficie de vidrio esmerilado real: dibuja una copia ALINEADA del wallpaper
  * (idealmente la version cacheada de rememberFrostWallpaper) recortada a los
  * limites del componente y desenfocada con UN RenderEffect cacheado en remember
  * (cero allocaciones por frame). El contenido va como sibling y queda nitido.
@@ -91,8 +91,8 @@ fun GlassSurface(
     wallpaper: ImageBitmap,
     rootSize: Size,
     shape: androidx.compose.ui.graphics.Shape,
-    tint: Color = Color(IOSTokens.COLOR_GLASS_TINT),
-    frost: Dp = IOSTokens.frostUltraThin,
+    tint: Color = Color(0x33101830),
+    frost: Dp = 30.dp,
     content: @Composable () -> Unit,
 ) {
     var surfaceBounds by remember { mutableStateOf(Rect.Zero) }
@@ -133,13 +133,13 @@ fun GlassSurface(
             }
             Box(Modifier.matchParentSize().background(tint))
         }
-        // 2) Capa LiquidGlass: refraccion + specular del propio vidrio (usar token v2)
+        // 2) Capa LiquidGlass: refraccion + specular del propio vidrio
         Box(
             modifier = Modifier
                 .matchParentSize()
                 .clip(shape)
-                .background(Color(IOSTokens.COLOR_GLASS_TINT))
-                .liquidGlass(blurDp = IOSTokens.GLASS_FROST_BLUR_DP.dp),
+                .background(Color(0x14101830))
+                .liquidGlass(blurDp = 14.dp),
         )
         // 3) Contenido nitido
         content()

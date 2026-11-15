@@ -30,11 +30,6 @@ uniform float uTime;
 uniform float uStrength;
 uniform float4 uTint;
 uniform float uSpecular;
-uniform float uChromaticAberration;
-uniform float uRefractionStrength;
-uniform float uRefractionCurvature;
-uniform float uShimmerAmplitude;
-uniform float uShimmerSpeed;
 
 half4 main(float2 fragCoord) {
     float2 uv = fragCoord / uResolution;
@@ -42,19 +37,18 @@ half4 main(float2 fragCoord) {
     float dist = length(center);
     float2 dir = dist > 0.0001 ? center / dist : float2(0.0, 0.0);
 
-    // Refracción tipo lente gruesa (calibrado iOS 27 frames oficial)
-    // r = strength * (refractionStrength + refractionCurvature * dist^2)
-    float r = uStrength * (uRefractionStrength + uRefractionCurvature * dist * dist);
+    // Refracción tipo lente gruesa (calibrado con frames del video oficial de Apple)
+    float r = uStrength * (0.018 + 0.06 * dist * dist);
     float2 base = dir * r * uResolution;
 
-    // Aberración cromática: cada canal refracta con factor ligeramente distinto
-    half4 cR = uContent.eval(fragCoord + base * (1.0 + uChromaticAberration));
+    // Aberración cromática sutil: cada canal refracta con factor ligeramente distinto
+    half4 cR = uContent.eval(fragCoord + base * 1.006);
     half4 cG = uContent.eval(fragCoord + base);
-    half4 cB = uContent.eval(fragCoord + base * (1.0 - uChromaticAberration));
+    half4 cB = uContent.eval(fragCoord + base * 0.994);
     float3 col = float3(cR.r, cG.g, cB.b);
     float alpha = float(cG.a);
 
-    // Tinte translúcido frío estilo iOS 27
+    // Tinte translúcido frío estilo iOS
     col = mix(col, float3(uTint.r, uTint.g, uTint.b), float(uTint.a));
 
     // Iluminación direccional desde arriba (rim brillante arriba, borde denso abajo)
@@ -63,9 +57,9 @@ half4 main(float2 fragCoord) {
     col += rim * uSpecular * (0.35 + 0.65 * topLight);
     col *= 1.0 - rim * 0.08 * (1.0 - topLight);
 
-    // Shimmer animable (iOS 27: amplitud y velocidad calibradas)
-    float shimmer = 0.5 + 0.5 * sin(uTime * uShimmerSpeed);
-    col += uShimmerAmplitude * shimmer;
+    // Brillo casi imperceptible animable
+    float shimmer = 0.5 + 0.5 * sin(uTime * 1.5);
+    col += 0.012 * shimmer;
 
     return half4(col, min(1.0, alpha + rim * 0.05));
 }
@@ -91,27 +85,22 @@ private class LiquidGlassHolder(
 }
 
 /**
- * Modifier de vidrio líquido iOS 27.
+ * Modifier de vidrio líquido.
  * @param tint    tinte translúcido (se mezcla dentro del shader en API 33+)
  * @param strength intensidad de la refracción de bordes
  * @param blurDp  radio del blur frosted (encadena antes del shader)
  * @param timeSec segundos para animar el shimmer (0 = estático, ahorra GPU)
  */
 fun Modifier.liquidGlass(
-    tint: Color = Color(IOSTokens.COLOR_GLASS_TINT),
+    tint: Color = Color(0x142E3A5F),
     strength: Float = 1f,
-    blurDp: Dp = IOSTokens.GLASS_FROST_BLUR_DP.dp,
+    blurDp: Dp = 32.dp,
     timeSec: Float = 0f,
 ): Modifier = composed {
     val density = androidx.compose.ui.platform.LocalDensity.current
     val specular = IOSTokens.GLASS_SPECULAR_INTENSITY
-    val chromaticAberration = IOSTokens.GLASS_CHROMATIC_ABERRATION
-    val refractionStrength = IOSTokens.GLASS_REFRACTION_STRENGTH
-    val refractionCurvature = IOSTokens.GLASS_REFRACTION_CURVATURE
-    val shimmerAmplitude = IOSTokens.GLASS_SHIMMER_AMPLITUDE
-    val shimmerSpeed = IOSTokens.GLASS_SHIMMER_SPEED
-    // Pipeline AGSL creado UNA vez por instancia (cero alloc por frame)
-    val holder = remember(tint, strength, blurDp, timeSec, density, specular, chromaticAberration, refractionStrength, refractionCurvature, shimmerAmplitude, shimmerSpeed) {
+    // TODO el pipeline AGSL se construye una sola vez por instancia (cero alloc por frame)
+    val holder = remember(tint, strength, blurDp, timeSec, density, specular) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 val radius = with(density) { blurDp.toPx() }
@@ -120,11 +109,6 @@ fun Modifier.liquidGlass(
                 shader.setFloatUniform("uTint", tint.red, tint.green, tint.blue, tint.alpha)
                 shader.setFloatUniform("uTime", timeSec)
                 shader.setFloatUniform("uSpecular", specular)
-                shader.setFloatUniform("uChromaticAberration", chromaticAberration)
-                shader.setFloatUniform("uRefractionStrength", refractionStrength)
-                shader.setFloatUniform("uRefractionCurvature", refractionCurvature)
-                shader.setFloatUniform("uShimmerAmplitude", shimmerAmplitude)
-                shader.setFloatUniform("uShimmerSpeed", shimmerSpeed)
                 val blur = RenderEffect.createBlurEffect(radius, radius, Shader.TileMode.CLAMP)
                 val shaderEffect = RenderEffect.createRuntimeShaderEffect(shader, "uContent")
                 // inner = blur, outer = shader (el shader refracta el contenido ya difuminado)
